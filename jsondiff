@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+difftool=diff
+[[ -f /usr/local/bin/ksdiff ]] && difftool=ksdiff
+
+lname=$(echo $1 | tr '/' '-')
+rname=$(echo $2 | tr '/' '-')
+
+lpath=/tmp/${lname}-$$-$RANDOM.json
+rpath=/tmp/${rname}-$$-$RANDOM.json
+
+cat $1 | jq '.' > $lpath
+cat $2 | jq '.' > $rpath
+
+$difftool $lpath $rpath

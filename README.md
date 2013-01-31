@@ -14,3 +14,11 @@ Fetches all Git repositories in your home folder. OS X only.
 Spawns `watch` to look for all processes with the given name. Updates continously.
 
     watch node
+
+## jsondiff
+
+*Requires jq*
+
+Diffs two pretty-printed diff files.
+
+    jsondiff /tmp/gas.json ./tmp/config/gas.json
