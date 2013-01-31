@@ -1,0 +1,4 @@
+#!/bin/bash
+
+procName=$1
+watch -n 0.05 "ps -f -p 0 \$(pgrep $procName)"

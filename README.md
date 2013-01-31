@@ -8,3 +8,9 @@ Pretty prints all arguments passed into it. Great for debugging issues when pass
 ## git-fetch-all
 
 Fetches all Git repositories in your home folder. OS X only.
+
+## watchps
+
+Spawns `watch` to look for all processes with the given name. Updates continously.
+
+    watch node
