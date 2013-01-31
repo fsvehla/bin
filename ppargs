@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+pid  = Process.pid
+time = Time.now.strftime('%H:%M:%S.%3N')
+args = ARGV.inspect
+
+$stderr.puts '%5d - %s - %s' % [pid, time, args]
