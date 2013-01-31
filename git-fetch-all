@@ -1,0 +1,5 @@
+#!/bin/bash -e
+# Fetches updates for all Git repositories in ~
+
+query='(kMDItemFSName == ".git")'
+mdfind -onlyin ~ -0 "${query}" | xargs -0 -n 1 -P 32 -I {} git --git-dir="{}" fetch --all --quiet $*
