@@ -22,3 +22,9 @@ Spawns `watch` to look for all processes with the given name. Updates continousl
 Diffs two pretty-printed diff files.
 
     jsondiff /tmp/gas.json ./tmp/config/gas.json
+
+## fix-open-with
+
+Fixes OS X’s “Open With” context menu entries
+
+    fix-open-with
