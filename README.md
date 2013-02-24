@@ -28,3 +28,7 @@ Diffs two pretty-printed diff files.
 Fixes OS X’s “Open With” context menu entries
 
     fix-open-with
+
+## git-unpushed
+
+Shows commits that weren’t jet pushed to the upstream branch

@@ -1,0 +1,6 @@
+#!/bin/bash -e
+
+localBranchName=$(git symbolic-ref --short HEAD)
+remoteBranchName="origin/${localBranchName}"
+
+git log --pretty=oneline $localBranchName --not $remoteBranchName
