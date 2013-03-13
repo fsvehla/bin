@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+# vim:syntax=ruby
+
+class FreePort
+  def run(argv)
+    ports = argv.map { |p| Integer(p) }
+
+    ports.each do |port|
+      pids = procs_of_port(port)
+      next if pids.empty?
+
+      $stderr.print '%6d - ' % port
+      $stderr.flush
+
+      pids.each do |pid|
+        $stderr.print "#{ pid } "
+        $stderr.flush
+
+        kill(pid)
+      end
+
+      $stderr.print "\n"
+      $stderr.flush
+    end
+  end
+
+  def procs_of_port(port)
+    IO.popen([ 'lsof', '-t', "-iTCP:#{ port }", '-sTCP:LISTEN' ]) do |lsof|
+      lsof.each_line.map { |l| l.chomp }.map { |s| Integer(s) }
+    end
+  end
+
+  def kill(pid)
+    Process.kill('TERM', pid)
+  end
+end
+
+FreePort.new.run(ARGV)

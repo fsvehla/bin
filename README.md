@@ -1,3 +1,13 @@
+## freeport
+
+Requires Ruby 1.9+
+
+Frees the ports specified on the command line by sending the processes a TERM signal.
+Prints the PIDs of the processes being terminated.
+
+    freeport 10000
+    10000 - 986 987 989
+
 ## ppargs
 
 Pretty prints all arguments passed into it. Great for debugging issues when passing args from shell scripts.
