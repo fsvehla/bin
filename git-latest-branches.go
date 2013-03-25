@@ -281,13 +281,13 @@ func main() {
 		diffHours := diffMins / 60
 		restMins := diffMins - (diffHours * 60)
 
-    timeTime := time.Unix(branch.headCommitTimestamp, 0)
+		timeTime := time.Unix(branch.headCommitTimestamp, 0)
 
 		fmt.Printf(
-			fmt.Sprintf("%%-%ds %%3dh %%02dm -- %%s\n", (lengthOfLongestBranchName + 1)),
+			fmt.Sprintf("%%-%ds %%3dh %%02dm -- %%s\n", (lengthOfLongestBranchName+1)),
 			branch.name,
 			diffHours,
 			restMins,
-      timeTime.Format(time.RFC1123))
+			timeTime.Format(time.RFC1123))
 	}
 }
