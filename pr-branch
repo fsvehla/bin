@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+require 'json'
+
+def github_repo_name
+  if %x'git config --get remote.origin.url' =~ (%r'github.com\:([^/]*)/(.*?)\.git')
+    "#{ $1 }/#{ $2 }"
+  else
+    raise RuntimeError, 'Unable to get GitHub URL'
+  end
+end
+
+def github_get(path)
+  command = 'curl -sS -u $(< ~/.github-credentials) https://api.github.com/repos/%s' % path
+  output  = `#{ command }`
+
+  if $?.exitstatus != 0
+    raise RuntimeError, 'Curl exited with non-zero'
+  end
+
+  return output
+end
+
+def github_pull_request_branch_name(pull_request_id)
+  output = github_get('%s/pulls/%d' % [github_repo_name, pull_request_id])
+  data   = JSON.parse(output)
+  sha = data.fetch('head').fetch('ref')
+  $stdout.print data.fetch('head').fetch('ref')
+end
+
+github_pull_request_branch_name ARGV[0]

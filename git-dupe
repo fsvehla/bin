@@ -1,0 +1,22 @@
+#!/bin/bash -e
+
+# Duplicates the current project im /tmp, cds into it and starts a shell
+
+export projectName=$(basename $(pwd))
+export projectRoot=$(pwd)
+export projectHEAD=$(git rev-parse HEAD)
+
+mkdir /tmp/$$
+export tempDir="/tmp/$$/${projectName}-clean-at-${projectHEAD}"
+
+cd /tmp # Better be safe
+
+git clone ${projectRoot} ${tempDir}
+cd $tempDir
+
+pwd
+
+git reset --hard ${thisGitRef}
+git log -n1 --pretty=oneline HEAD
+
+exec $SHELL
