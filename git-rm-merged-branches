@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+
+# This script is opinionated in the following way:
+# - origin/master is the branch of truth. not tracked branches
+# - it does not remote remote branches in any way
+#
+# If you don't merge into origin/master this script is not for you, since you are doing it wrong.
+#
+# Branches are deleted with git branch -D (force), so we can delete branches even if they are not merged
+# into HEAD so it must not matter in which branch this script is run.
+#
+# pass -r to clean up remote branches
+
+from subprocess import check_output
+from time       import strftime
+from sys        import argv
+
+now     = strftime("%Y-%m-%d %H:%M:%S")
+dry_run = '--dry-run' in argv or '-d' in argv
+do_it   = '--do-it' in argv
+
+with open('.git/rm-merged-branches.log', 'a') as backup:
+  if '-r' in argv:
+    for line in check_output(['git', 'branch', '-a', '--merged', 'origin/master']).splitlines():
+      branch = line.strip()
+
+      if 'remotes/' in branch and not 'pr/' in branch and not 'master' in branch:
+        ref = check_output(['git', 'rev-parse', branch]).strip()
+        log = "{} {} {}".format(now, ref, branch)
+
+        print(log)
+
+        if do_it:
+          remote_branch = branch.replace('remotes/origin/', '')
+
+          backup.write(log + "\n")
+          backup.flush()
+
+          check_output(['git', 'push', 'origin', '--delete', remote_branch])
+
+          print('git push origin --delete ' + remote_branch)
+  else:
+    for line in check_output(['git', 'branch', '--merged', 'origin/master']).splitlines():
+      branch = line.strip()
+
+      if branch != 'master' and not branch.startswith('*'):
+          ref = check_output(['git', 'rev-parse', branch]).strip()
+          log = "{} {} {}".format(now, ref, branch)
+
+          print(log)
+
+          # force deletion since we might not have the upstream branch setup correctly (who can figure this shit out?)
+          # and we don't want to check HEAD anyway
+          if do_it:
+            backup.write(log + "\n")
+            backup.flush()
+
+            check_output(['git', 'branch', '-D', branch])
+
+if not do_it:
+  print
+  print "To do it, pass --do-it"
